@@ -2,31 +2,33 @@ version: "3.8"
 services:
   postgres:
     image: pgvector/pgvector:0.7.0-pg16
-    container_name: pgvector
+    container_name: pgvector-local
+    ports:
+      - "5432:5432"
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: localdb
-    volumes:
-      - pgvector_data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
-    restart: always
     healthcheck:
-      test: ["CMD", "pg_isready", "-q", "-d", "localdb"]
+      test: "pg_isready --username=postgres && psql --username=postgres --list"
       interval: 5s
       timeout: 60s
       retries: 5
-
-  ollama-api-local:
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+  ollama:
     image: ollama/ollama:latest
     container_name: ollama
     restart: always
     ports:
       - "11434:11434"
+    post_start:
+      - command: sh -c "ollama pull mistral && ollama pull nomic-embed-text"
     volumes:
       - ollama_data:/root/.ollama
-
 volumes:
-  pgvector_data:
+  postgres_data:
+    driver: local
   ollama_data:
+    driver: local

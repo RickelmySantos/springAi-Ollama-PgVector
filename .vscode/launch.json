@@ -1,0 +1,14 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Spring Boot-SpringAiApplication<spring-ai>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "com.br.rs.desenvolvimento.spring_ai.SpringAiApplication",
+      "projectName": "spring-ai",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
+}
