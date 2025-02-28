@@ -1,5 +1,6 @@
 package com.br.rs.desenvolvimento.spring_ai.controladores;
 
+import com.br.rs.desenvolvimento.spring_ai.model.PromptRequest;
 import com.br.rs.desenvolvimento.spring_ai.services.ChatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,8 +18,8 @@ public class ChatController {
 
 
   @PostMapping("/{conversationId}")
-  public String prompt(@PathVariable String conversationId, @RequestBody String prompt) {
-    return this.chatService.prompt(conversationId, prompt);
+  public String prompt(@PathVariable String conversationId, @RequestBody PromptRequest prompt) {
+    return this.chatService.prompt(conversationId, prompt.toString());
   }
 
 }
