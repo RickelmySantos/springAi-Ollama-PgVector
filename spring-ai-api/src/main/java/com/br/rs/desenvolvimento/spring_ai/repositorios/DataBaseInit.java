@@ -2,6 +2,7 @@ package com.br.rs.desenvolvimento.spring_ai.repositorios;
 
 import jakarta.annotation.PostConstruct;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.reader.markdown.MarkdownDocumentReader;
 import org.springframework.ai.reader.markdown.config.MarkdownDocumentReaderConfig;
@@ -12,11 +13,12 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
 @Component
+@Slf4j
 public class DataBaseInit {
 
   private final VectorStore vectorStore;
-
   private final Resource resource;
+
 
   public DataBaseInit(VectorStore vectorStore,
       @Value("classpath:documents/biblioteca.md") Resource resource) {
@@ -30,8 +32,19 @@ public class DataBaseInit {
     List<Document> documents = this.loadMarkdown();
     var textSplit = new TokenTextSplitter();
     var transformerDocuments = textSplit.apply(documents);
-    this.vectorStore.add(transformerDocuments);
 
+    boolean exists =
+        transformerDocuments.stream().map(Document::getFormattedContent).anyMatch(content -> {
+          List<Document> results = this.vectorStore.similaritySearch(content);
+          return results != null && !results.isEmpty();
+        });
+
+    if (!exists) {
+      this.vectorStore.add(transformerDocuments);
+      DataBaseInit.log.info("{} documentos foram inseridos no banco.", transformerDocuments.size());
+    } else {
+      DataBaseInit.log.info("Os documentos já existem no banco. Nenhuma inserção necessária.");
+    }
   }
 
   List<Document> loadMarkdown() {

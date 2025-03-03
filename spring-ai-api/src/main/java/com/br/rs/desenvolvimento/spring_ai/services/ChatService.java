@@ -4,7 +4,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.AbstractChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
+import org.springframework.ai.chat.client.advisor.QuestionAnswerAdvisor;
+import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
+import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -17,8 +20,10 @@ public class ChatService {
   private final ChatClient chatClient;
 
   public ChatService(ChatClient.Builder chatClientBuilder, ChatMemory chatMemory,
-      @Value("classpath:/prompts/prompt.st") Resource systemPrompt) {
-    this.chatClient = chatClientBuilder.defaultAdvisors(new MessageChatMemoryAdvisor(chatMemory))
+      @Value("classpath:/prompts/prompt.st") Resource systemPrompt, VectorStore vectorStore) {
+    this.chatClient = chatClientBuilder
+        .defaultAdvisors(new MessageChatMemoryAdvisor(chatMemory),
+            new QuestionAnswerAdvisor(vectorStore), new SimpleLoggerAdvisor())
         .defaultSystem(systemPrompt).build();
   }
 
@@ -34,5 +39,4 @@ public class ChatService {
 
     return response;
   }
-
 }
