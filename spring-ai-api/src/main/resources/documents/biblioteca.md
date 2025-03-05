@@ -1,6 +1,44 @@
 # Sistema de Gerenciamento de Biblioteca
 
-Este projeto é um sistema básico de gerenciamento de biblioteca desenvolvido com Spring Framework. Ele foi criado com o objetivo de aprimorar conceitos de programação, lógica e uso de ferramentas modernas no desenvolvimento backend.
+Bem-vindo ao Sistema de Gerenciamento de Biblioteca, um espaço digital criado para facilitar a organização e o controle de livros, usuários e empréstimos. Se você gosta de ler ou administra uma biblioteca, aqui você encontra uma maneira simples e eficiente de gerenciar tudo em um só lugar.
+
+---
+
+## 🔍 Funcionalidades Principais
+
+1. **Pesquisa de Livros**
+
+   - O usuário pode buscar um livro pelo nome do livro ou pelo nome do autor.
+
+2. **Empréstimo de Livros**
+
+   - O usuário pode realizar o empréstimo de um livro, desde que ele não esteja atualmente emprestado por outro usuário.
+
+3. **Top 10 Livros da Semana**
+
+   - Exibição dos 10 livros mais emprestados da semana.
+
+4. **Lançamentos**
+   - Exibição dos livros recém-adicionados à biblioteca.
+
+## ⚠️ Regras do Empréstimo
+
+- Um livro só pode ser emprestado se estiver disponível.
+- Caso o livro esteja emprestado, o usuário pode aguardar sua devolução ou buscar outro livro.
+- O sistema pode ter um limite de tempo para devolução do livro, conforme as regras da biblioteca.
+
+## 🤖 Como o Chatbot Pode Ajudar?
+
+- Pesquisar livros disponíveis por título ou autor.
+- Informar se um livro está disponível para empréstimo.
+- Exibir os livros mais populares da semana.
+- Listar os lançamentos mais recentes da biblioteca.
+- Auxiliar no processo de empréstimo, caso o usuário tenha uma conta cadastrada.
+
+## 📌 Observações
+
+- Para realizar empréstimos, o usuário pode precisar de um cadastro no sistema.
+- O chatbot pode informar disponibilidade, mas a reserva pode precisar ser feita dentro do sistema da biblioteca.
 
 ---
 

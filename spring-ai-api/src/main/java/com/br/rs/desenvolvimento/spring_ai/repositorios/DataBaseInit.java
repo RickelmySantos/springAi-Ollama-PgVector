@@ -1,12 +1,11 @@
 package com.br.rs.desenvolvimento.spring_ai.repositorios;
 
-import jakarta.annotation.PostConstruct;
+import com.br.rs.desenvolvimento.spring_ai.core.repositorios.BaseRepository;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.reader.markdown.MarkdownDocumentReader;
 import org.springframework.ai.reader.markdown.config.MarkdownDocumentReaderConfig;
-import org.springframework.ai.transformer.splitter.TokenTextSplitter;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -14,40 +13,60 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
-public class DataBaseInit {
+public class DataBaseInit extends BaseRepository<Document> {
 
-  private final VectorStore vectorStore;
   private final Resource resource;
-
 
   public DataBaseInit(VectorStore vectorStore,
       @Value("classpath:documents/biblioteca.md") Resource resource) {
-    this.vectorStore = vectorStore;
+    super(vectorStore);
     this.resource = resource;
   }
+  // private final VectorStore vectorStore;
 
 
-  @PostConstruct
-  void init() {
-    List<Document> documents = this.loadMarkdown();
-    var textSplit = new TokenTextSplitter();
-    var transformerDocuments = textSplit.apply(documents);
 
-    boolean exists =
-        transformerDocuments.stream().map(Document::getFormattedContent).anyMatch(content -> {
-          List<Document> results = this.vectorStore.similaritySearch(content);
-          return results != null && !results.isEmpty();
-        });
+  // public DataBaseInit(VectorStore vectorStore,
+  // @Value("classpath:documents/biblioteca.md") Resource resource) {
+  // this.vectorStore = vectorStore;
+  // this.resource = resource;
+  // }
 
-    if (!exists) {
-      this.vectorStore.add(transformerDocuments);
-      DataBaseInit.log.info("{} documentos foram inseridos no banco.", transformerDocuments.size());
-    } else {
-      DataBaseInit.log.info("Os documentos já existem no banco. Nenhuma inserção necessária.");
-    }
-  }
 
-  List<Document> loadMarkdown() {
+  // @PostConstruct
+  // void init() {
+  // List<Document> documents = this.loadMarkdown();
+  // var textSplit = new TokenTextSplitter();
+  // var transformerDocuments = textSplit.apply(documents);
+
+  // boolean exists =
+  // transformerDocuments.stream().map(Document::getFormattedContent).anyMatch(content -> {
+  // List<Document> results = this.vectorStore.similaritySearch(content);
+  // return results != null && !results.isEmpty();
+  // });
+
+  // if (!exists) {
+  // this.vectorStore.add(transformerDocuments);
+  // DataBaseInit.log.info("{} documentos foram inseridos no banco.", transformerDocuments.size());
+  // } else {
+  // DataBaseInit.log.info("Os documentos já existem no banco. Nenhuma inserção necessária.");
+  // }
+  // }
+
+  // List<Document> loadMarkdown() {
+
+  // MarkdownDocumentReaderConfig config = MarkdownDocumentReaderConfig.builder()
+  // .withHorizontalRuleCreateDocument(true).withIncludeCodeBlock(false)
+  // .withIncludeBlockquote(false).withAdditionalMetadata("filename", "biblioteca.md").build();
+
+  // MarkdownDocumentReader reader = new MarkdownDocumentReader(this.resource, config);
+  // return reader.get();
+  // }
+
+
+  @Override
+  protected List<Document> loadDocuments() {
+    DataBaseInit.log.info("Carregando documentos do Markdown...");
 
     MarkdownDocumentReaderConfig config = MarkdownDocumentReaderConfig.builder()
         .withHorizontalRuleCreateDocument(true).withIncludeCodeBlock(false)

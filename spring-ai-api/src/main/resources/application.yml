@@ -35,3 +35,9 @@ spring:
         index-type: hnsw
         dimensions: 768
         distance-type: COSINE_DISTANCE
+
+logging:
+  level:
+    org.springframework.ai.ollama: DEBUG
+    org.springframework.web.client: DEBUG
+    org.springframework.ai: DEBUG
